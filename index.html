@@ -2,110 +2,258 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+
+  <!-- IMPORTANTE PARA RESPONSIVE EN CELULARES -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Turnero Ultra Moderno | Patric Soft</title>
-  <!-- Favicon SVG -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fbbf24'><path d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z'/></svg>">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <meta name="description" content="Sistema profesional de gestión y control de turnos - Patric Soft">
+  <meta name="author" content="Patric Soft">
+
+  <title>Gestión de Turnos | Patric Soft</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-  <!-- Contenedor de Notificaciones Toast -->
-  <div id="toast-container" class="toast-container"></div>
+<body>
 
   <!-- Marca Registrada -->
   <div class="brand-badge">
-    <span>® Patric Soft</span>
+    ® Patric Soft
   </div>
 
+  <!-- Aplicación -->
   <div class="app-container">
-    <!-- Header con Métricas -->
+
+    <!-- Header -->
     <header>
+
       <div>
         <h1>Gestión de Turnos</h1>
-        <p class="subtitle">Sistema Profesional de Control de Citas</p>
+        <p class="subtitle">
+          Sistema profesional de control de citas y clientes
+        </p>
       </div>
+
+      <!-- Estadísticas -->
       <div class="stats-container">
+
         <div class="stat-card">
           <span>Total</span>
           <strong id="stat-total">0</strong>
         </div>
+
         <div class="stat-card">
           <span>Confirmados</span>
           <strong id="stat-confirmed">0</strong>
         </div>
+
         <div class="stat-card">
           <span>Pendientes</span>
           <strong id="stat-pending">0</strong>
         </div>
+
       </div>
+
     </header>
 
+
+    <!-- Contenido principal -->
     <div class="main-content">
+
       <!-- Panel de Reserva -->
       <div class="panel">
+
         <h2>Agendar Nuevo Turno</h2>
+
         <form id="appointment-form">
+
           <div class="form-group">
             <label for="client-name">Nombre Completo</label>
-            <input type="text" id="client-name" class="form-control" placeholder="Ej: Carlos Pérez" required>
+
+            <input
+              type="text"
+              id="client-name"
+              class="form-control"
+              placeholder="Ej: Carlos Pérez"
+              required
+            >
           </div>
+
+
           <div class="form-group">
             <label for="client-phone">Teléfono / WhatsApp</label>
-            <input type="tel" id="client-phone" class="form-control" placeholder="Ej: +5491112345678" required>
+
+            <input
+              type="tel"
+              id="client-phone"
+              class="form-control"
+              placeholder="Ej: +5491112345678"
+              required
+            >
           </div>
+
+
           <div class="form-group">
             <label for="service-type">Servicio</label>
-            <select id="service-type" class="form-control" required>
-              <option value="" disabled selected>Seleccione un servicio</option>
-              <option value="Consulta General">Consulta General ($50 - 30 min)</option>
-              <option value="Soporte Técnico">Soporte Técnico ($80 - 60 min)</option>
-              <option value="Asesoría Comercial">Asesoría Comercial ($100 - 45 min)</option>
+
+            <select
+              id="service-type"
+              class="form-control"
+              required
+            >
+              <option value="" disabled selected>
+                Seleccione un servicio
+              </option>
+
+              <option value="Consulta General">
+                Consulta General ($50 - 30 min)
+              </option>
+
+              <option value="Soporte Técnico">
+                Soporte Técnico ($80 - 60 min)
+              </option>
+
+              <option value="Asesoría Comercial">
+                Asesoría Comercial ($100 - 45 min)
+              </option>
             </select>
           </div>
+
+
           <div class="form-group">
             <label for="app-date">Fecha</label>
-            <input type="date" id="app-date" class="form-control" required>
+
+            <input
+              type="date"
+              id="app-date"
+              class="form-control"
+              required
+            >
           </div>
+
+
           <div class="form-group">
             <label for="app-time">Hora</label>
-            <input type="time" id="app-time" class="form-control" required>
+
+            <input
+              type="time"
+              id="app-time"
+              class="form-control"
+              required
+            >
           </div>
-          <button type="submit" class="btn-submit">Reservar Turno</button>
+
+
+          <button
+            type="submit"
+            class="btn-submit"
+          >
+            Reservar Turno
+          </button>
+
         </form>
+
       </div>
+
 
       <!-- Lista de Turnos -->
       <div class="panel">
+
         <div class="panel-header">
+
           <h2>Próximos Turnos</h2>
-          <button id="btn-export" class="btn-export" title="Exportar a Excel / CSV">📊 Exportar CSV</button>
+
+          <button
+            id="btn-export"
+            class="btn-export"
+            title="Exportar a Excel / CSV"
+          >
+            📊 Exportar CSV
+          </button>
+
         </div>
+
 
         <!-- Filtros y Búsqueda -->
         <div class="filter-bar">
-          <input type="text" id="search-input" class="form-control search-input" placeholder="🔍 Buscar cliente o servicio...">
-          <select id="filter-status" class="form-control filter-select">
-            <option value="todos">Todos los estados</option>
-            <option value="pendiente">Pendientes</option>
-            <option value="confirmado">Confirmados</option>
-            <option value="cancelado">Cancelados</option>
+
+          <input
+            type="text"
+            id="search-input"
+            class="form-control search-input"
+            placeholder="🔍 Buscar cliente o servicio..."
+          >
+
+          <select
+            id="filter-status"
+            class="form-control filter-select"
+          >
+            <option value="todos">
+              Todos los estados
+            </option>
+
+            <option value="pendiente">
+              Pendientes
+            </option>
+
+            <option value="confirmado">
+              Confirmados
+            </option>
+
+            <option value="cancelado">
+              Cancelados
+            </option>
           </select>
+
         </div>
 
-        <div id="appointments-container" class="appointments-list">
-          <!-- Render dinámico desde JS -->
+
+        <!-- Turnos generados dinámicamente por JavaScript -->
+        <div
+          id="appointments-container"
+          class="appointments-list"
+        >
         </div>
+
       </div>
+
     </div>
+
   </div>
 
-  <!-- Contacto Desarrollador -->
-  <footer class="developer-contact">
-    <a href="mailto:desarrollador@patricsoft.com" target="_blank">Contactar con el desarrollador</a>
-  </footer>
 
+  <!-- Contacto Desarrollador -->
+  <div class="developer-contact">
+    <a
+      href="#"
+      aria-label="Contacto Patric Soft"
+    >
+      Patric Soft
+    </a>
+  </div>
+
+
+  <!-- Toast Notifications -->
+  <div
+    id="toast-container"
+    class="toast-container"
+    aria-live="polite"
+    aria-atomic="true"
+  >
+  </div>
+
+
+  <!-- JavaScript -->
   <script src="script.js"></script>
+
 </body>
 </html>
