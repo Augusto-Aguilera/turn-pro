@@ -17,7 +17,6 @@ const btnExport = document.getElementById('btn-export');
 // INICIALIZAR FECHA MÍNIMA
 // ============================================
 
-// Establecer como fecha mínima el día actual
 document.getElementById('app-date').min = new Date()
   .toISOString()
   .split('T')[0];
