@@ -1,247 +1,696 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
   <meta charset="UTF-8">
 
   <!-- IMPORTANTE PARA RESPONSIVE EN CELULARES -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="description" content="Sistema profesional de gestión y control de turnos - Patric Soft">
-  <meta name="author" content="Patric Soft">
+  <meta
+    name="description"
+    content="Sistema profesional de gestión y control de turnos - Patric Soft"
+  >
+
+  <meta
+    name="author"
+    content="Patric Soft"
+  >
 
   <title>Gestión de Turnos | Patric Soft</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Google Fonts -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   >
 
+
   <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
 </head>
+
 
 <body>
 
-  <!-- Marca Registrada -->
+
+  <!-- ============================================
+       MARCA REGISTRADA
+       ============================================ -->
+
   <div class="brand-badge">
+
     ® Patric Soft
+
   </div>
 
-  <!-- Aplicación -->
-  <div class="app-container">
 
-    <!-- Header -->
-    <header>
+  <!-- ============================================
+       PANTALLA DE AUTENTICACIÓN
+       ============================================ -->
 
-      <div>
-        <h1>Gestión de Turnos</h1>
-        <p class="subtitle">
-          Sistema profesional de control de citas y clientes
+  <div
+    id="auth-screen"
+    class="auth-screen"
+  >
+
+    <div class="auth-box">
+
+
+      <div class="auth-header">
+
+        <h1>PATRIC SOFT</h1>
+
+        <p>
+          Gestión profesional de turnos
         </p>
-      </div>
-
-      <!-- Estadísticas -->
-      <div class="stats-container">
-
-        <div class="stat-card">
-          <span>Total</span>
-          <strong id="stat-total">0</strong>
-        </div>
-
-        <div class="stat-card">
-          <span>Confirmados</span>
-          <strong id="stat-confirmed">0</strong>
-        </div>
-
-        <div class="stat-card">
-          <span>Pendientes</span>
-          <strong id="stat-pending">0</strong>
-        </div>
 
       </div>
 
-    </header>
+
+      <!-- LOGIN -->
+
+      <div
+        id="login-form-container"
+      >
+
+        <h2>Iniciar Sesión</h2>
+
+        <p class="auth-description">
+
+          Ingresá a tu cuenta para administrar
+          tus turnos.
+
+        </p>
 
 
-    <!-- Contenido principal -->
-    <div class="main-content">
+        <form id="login-form">
 
-      <!-- Panel de Reserva -->
-      <div class="panel">
-
-        <h2>Agendar Nuevo Turno</h2>
-
-        <form id="appointment-form">
 
           <div class="form-group">
-            <label for="client-name">Nombre Completo</label>
+
+            <label for="login-email">
+              Correo electrónico
+            </label>
 
             <input
-              type="text"
-              id="client-name"
+              type="email"
+              id="login-email"
               class="form-control"
-              placeholder="Ej: Carlos Pérez"
+              placeholder="tu@email.com"
+              autocomplete="email"
               required
             >
+
           </div>
 
 
           <div class="form-group">
-            <label for="client-phone">Teléfono / WhatsApp</label>
+
+            <label for="login-password">
+              Contraseña
+            </label>
 
             <input
-              type="tel"
-              id="client-phone"
+              type="password"
+              id="login-password"
               class="form-control"
-              placeholder="Ej: +5491112345678"
+              placeholder="••••••••"
+              autocomplete="current-password"
               required
             >
-          </div>
 
-
-          <div class="form-group">
-            <label for="service-type">Servicio</label>
-
-            <select
-              id="service-type"
-              class="form-control"
-              required
-            >
-              <option value="" disabled selected>
-                Seleccione un servicio
-              </option>
-
-              <option value="Consulta General">
-                Consulta General ($50 - 30 min)
-              </option>
-
-              <option value="Soporte Técnico">
-                Soporte Técnico ($80 - 60 min)
-              </option>
-
-              <option value="Asesoría Comercial">
-                Asesoría Comercial ($100 - 45 min)
-              </option>
-            </select>
-          </div>
-
-
-          <div class="form-group">
-            <label for="app-date">Fecha</label>
-
-            <input
-              type="date"
-              id="app-date"
-              class="form-control"
-              required
-            >
-          </div>
-
-
-          <div class="form-group">
-            <label for="app-time">Hora</label>
-
-            <input
-              type="time"
-              id="app-time"
-              class="form-control"
-              required
-            >
           </div>
 
 
           <button
             type="submit"
             class="btn-submit"
+            id="login-submit"
           >
-            Reservar Turno
+            🔐 Iniciar Sesión
           </button>
+
 
         </form>
 
-      </div>
 
+        <p class="auth-switch">
 
-      <!-- Lista de Turnos -->
-      <div class="panel">
-
-        <div class="panel-header">
-
-          <h2>Próximos Turnos</h2>
+          ¿Todavía no tenés una cuenta?
 
           <button
-            id="btn-export"
-            class="btn-export"
-            title="Exportar a Excel / CSV"
+            type="button"
+            id="show-register"
+            class="auth-link"
           >
-            📊 Exportar CSV
+            Crear cuenta
           </button>
 
-        </div>
-
-
-        <!-- Filtros y Búsqueda -->
-        <div class="filter-bar">
-
-          <input
-            type="text"
-            id="search-input"
-            class="form-control search-input"
-            placeholder="🔍 Buscar cliente o servicio..."
-          >
-
-          <select
-            id="filter-status"
-            class="form-control filter-select"
-          >
-            <option value="todos">
-              Todos los estados
-            </option>
-
-            <option value="pendiente">
-              Pendientes
-            </option>
-
-            <option value="confirmado">
-              Confirmados
-            </option>
-
-            <option value="cancelado">
-              Cancelados
-            </option>
-          </select>
-
-        </div>
-
-
-        <!-- Turnos generados dinámicamente por JavaScript -->
-        <div
-          id="appointments-container"
-          class="appointments-list"
-        >
-        </div>
+        </p>
 
       </div>
+
+
+      <!-- REGISTRO -->
+
+      <div
+        id="register-form-container"
+        class="auth-hidden"
+      >
+
+        <h2>Crear Cuenta</h2>
+
+        <p class="auth-description">
+
+          Probá gratuitamente el sistema
+          de gestión de turnos.
+
+        </p>
+
+
+        <form id="register-form">
+
+
+          <div class="form-group">
+
+            <label for="register-business">
+              Nombre del negocio
+            </label>
+
+            <input
+              type="text"
+              id="register-business"
+              class="form-control"
+              placeholder="Ej: Barbería El Estilo"
+              autocomplete="organization"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="register-email">
+              Correo electrónico
+            </label>
+
+            <input
+              type="email"
+              id="register-email"
+              class="form-control"
+              placeholder="tu@email.com"
+              autocomplete="email"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="register-password">
+              Contraseña
+            </label>
+
+            <input
+              type="password"
+              id="register-password"
+              class="form-control"
+              placeholder="Mínimo 6 caracteres"
+              minlength="6"
+              autocomplete="new-password"
+              required
+            >
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="btn-submit"
+            id="register-submit"
+          >
+            🚀 Crear Cuenta
+          </button>
+
+
+        </form>
+
+
+        <p class="auth-switch">
+
+          ¿Ya tenés una cuenta?
+
+          <button
+            type="button"
+            id="show-login"
+            class="auth-link"
+          >
+            Iniciar sesión
+          </button>
+
+        </p>
+
+      </div>
+
+
+      <!-- MENSAJE DE AUTENTICACIÓN -->
+
+      <div
+        id="auth-message"
+        class="auth-message"
+        role="alert"
+      ></div>
+
 
     </div>
 
   </div>
 
 
-  <!-- Contacto Desarrollador -->
+  <!-- ============================================
+       APLICACIÓN
+       ============================================ -->
+
+  <div
+    id="app-content"
+    class="app-content-hidden"
+  >
+
+
+    <div class="app-container">
+
+
+      <!-- ==========================================
+           HEADER
+           ========================================== -->
+
+      <header>
+
+
+        <div class="header-main">
+
+          <h1>
+            Gestión de Turnos
+          </h1>
+
+          <p class="subtitle">
+
+            Sistema profesional de control
+            de citas y clientes
+
+          </p>
+
+        </div>
+
+
+        <!-- Estadísticas -->
+
+        <div class="stats-container">
+
+
+          <div class="stat-card">
+
+            <span>Total</span>
+
+            <strong id="stat-total">
+              0
+            </strong>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <span>Confirmados</span>
+
+            <strong id="stat-confirmed">
+              0
+            </strong>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <span>Pendientes</span>
+
+            <strong id="stat-pending">
+              0
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- Usuario -->
+
+        <div class="user-panel">
+
+          <div class="user-info">
+
+            <span
+              id="user-business"
+              class="user-business"
+            >
+              Mi negocio
+            </span>
+
+            <span
+              id="user-email"
+              class="user-email"
+            >
+            </span>
+
+          </div>
+
+
+          <button
+            type="button"
+            id="btn-logout"
+            class="btn-logout"
+          >
+            🚪 Salir
+          </button>
+
+        </div>
+
+
+      </header>
+
+
+      <!-- ==========================================
+           CONTENIDO PRINCIPAL
+           ========================================== -->
+
+      <div class="main-content">
+
+
+        <!-- ========================================
+             PANEL DE RESERVA
+             ======================================== -->
+
+        <div class="panel">
+
+
+          <div class="demo-header">
+
+            <h2>
+              Agendar Nuevo Turno
+            </h2>
+
+            <span
+              id="demo-counter"
+              class="demo-counter"
+            >
+              Demo: 0 / 3
+            </span>
+
+          </div>
+
+
+          <div
+            id="limit-message"
+            class="limit-message"
+          >
+
+            <strong>
+              🎯 Demo gratuita finalizada
+            </strong>
+
+            <p>
+              Ya utilizaste los 3 turnos de prueba.
+              Contactate con Patric Soft para
+              habilitar el sistema completo.
+            </p>
+
+            <a
+              href="#"
+              class="contact-demo-link"
+              aria-label="Contactar a Patric Soft"
+            >
+              📲 Contactar a Patric Soft
+            </a>
+
+          </div>
+
+
+          <form id="appointment-form">
+
+
+            <div class="form-group">
+
+              <label for="client-name">
+                Nombre Completo
+              </label>
+
+              <input
+                type="text"
+                id="client-name"
+                class="form-control"
+                placeholder="Ej: Carlos Pérez"
+                required
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="client-phone">
+                Teléfono / WhatsApp
+              </label>
+
+              <input
+                type="tel"
+                id="client-phone"
+                class="form-control"
+                placeholder="Ej: +5491112345678"
+                required
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="service-type">
+                Servicio
+              </label>
+
+              <select
+                id="service-type"
+                class="form-control"
+                required
+              >
+
+                <option
+                  value=""
+                  disabled
+                  selected
+                >
+                  Seleccione un servicio
+                </option>
+
+
+                <option value="Consulta General">
+                  Consulta General ($50 - 30 min)
+                </option>
+
+
+                <option value="Soporte Técnico">
+                  Soporte Técnico ($80 - 60 min)
+                </option>
+
+
+                <option value="Asesoría Comercial">
+                  Asesoría Comercial ($100 - 45 min)
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="app-date">
+                Fecha
+              </label>
+
+              <input
+                type="date"
+                id="app-date"
+                class="form-control"
+                required
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="app-time">
+                Hora
+              </label>
+
+              <input
+                type="time"
+                id="app-time"
+                class="form-control"
+                required
+              >
+
+            </div>
+
+
+            <button
+              type="submit"
+              class="btn-submit"
+              id="btn-submit-appointment"
+            >
+              Reservar Turno
+            </button>
+
+
+          </form>
+
+
+        </div>
+
+
+        <!-- ========================================
+             LISTA DE TURNOS
+             ======================================== -->
+
+        <div class="panel">
+
+
+          <div class="panel-header">
+
+
+            <h2>
+              Próximos Turnos
+            </h2>
+
+
+            <button
+              id="btn-export"
+              class="btn-export"
+              title="Exportar a Excel / CSV"
+            >
+              📊 Exportar CSV
+            </button>
+
+
+          </div>
+
+
+          <!-- Filtros -->
+
+          <div class="filter-bar">
+
+
+            <input
+              type="text"
+              id="search-input"
+              class="form-control search-input"
+              placeholder="🔍 Buscar cliente o servicio..."
+            >
+
+
+            <select
+              id="filter-status"
+              class="form-control filter-select"
+            >
+
+              <option value="todos">
+                Todos los estados
+              </option>
+
+              <option value="pendiente">
+                Pendientes
+              </option>
+
+              <option value="confirmado">
+                Confirmados
+              </option>
+
+              <option value="cancelado">
+                Cancelados
+              </option>
+
+            </select>
+
+
+          </div>
+
+
+          <!-- Turnos -->
+
+          <div
+            id="appointments-container"
+            class="appointments-list"
+          >
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- ============================================
+       CONTACTO DESARROLLADOR
+       ============================================ -->
+
   <div class="developer-contact">
+
     <a
       href="#"
       aria-label="Contacto Patric Soft"
     >
       Patric Soft
     </a>
+
   </div>
 
 
-  <!-- Toast Notifications -->
+  <!-- ============================================
+       TOAST NOTIFICATIONS
+       ============================================ -->
+
   <div
     id="toast-container"
     class="toast-container"
@@ -251,8 +700,18 @@
   </div>
 
 
+  <!-- ============================================
+       SUPABASE
+       ============================================ -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
   <!-- JavaScript -->
+
   <script src="script.js"></script>
 
+
 </body>
+
 </html>
