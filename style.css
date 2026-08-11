@@ -1,3 +1,4 @@
+
 :root {
   --bg-gradient: linear-gradient(135deg, #0b132b 0%, #1c2541 50%, #0b132b 100%);
   --glass-bg: rgba(255, 255, 255, 0.03);
@@ -73,32 +74,117 @@ body {
 
 
 /* ==============================
-   CONTACTO DESARROLLADOR
+   AUTENTICACIÓN
    ============================== */
 
-.developer-contact {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  z-index: 100;
+.auth-screen {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
 }
 
-.developer-contact a {
+.auth-box {
+  width: 100%;
+  max-width: 440px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.auth-header p {
   color: var(--text-muted);
   font-size: 0.85rem;
-  text-decoration: none;
-  background: rgba(11, 19, 43, 0.85);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-border);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  margin-top: 0.4rem;
 }
 
-.developer-contact a:hover {
+.auth-box h2 {
+  color: var(--text-main);
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-description {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.auth-switch {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 1.5rem;
+}
+
+.auth-link {
+  background: none;
+  border: none;
   color: #fbbf24;
-  border-color: #fbbf24;
-  box-shadow: 0 0 12px rgba(251, 191, 36, 0.25);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+.auth-hidden {
+  display: none;
+}
+
+.auth-message {
+  display: none;
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.auth-message.success {
+  display: block;
+  color: var(--status-confirmed);
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.auth-message.error {
+  display: block;
+  color: var(--status-cancelled);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+
+/* ==============================
+   CONTENIDO DE LA APP
+   ============================== */
+
+.app-content-hidden {
+  display: none;
 }
 
 
@@ -136,8 +222,12 @@ header {
   min-width: 0;
 }
 
-header > div:first-child {
+header > div {
   min-width: 0;
+}
+
+.header-main {
+  flex: 1;
 }
 
 header h1 {
@@ -153,6 +243,7 @@ header h1 {
   font-size: 0.85rem;
   color: var(--text-muted);
   margin-top: 0.2rem;
+  line-height: 1.5;
 }
 
 
@@ -185,6 +276,58 @@ header h1 {
 .stat-card strong {
   font-size: 1.2rem;
   color: #fbbf24;
+}
+
+
+/* ==============================
+   USUARIO
+   ============================== */
+
+.user-panel {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-align: right;
+}
+
+.user-business {
+  color: #fbbf24;
+  font-size: 0.8rem;
+  font-weight: 700;
+  max-width: 180px;
+  overflow-wrap: anywhere;
+}
+
+.user-email {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  max-width: 180px;
+  overflow-wrap: anywhere;
+}
+
+.btn-logout {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-logout:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
 }
 
 
@@ -229,7 +372,7 @@ header h1 {
 
 
 /* ==============================
-   PANEL HEADER
+   HEADER DEL PANEL
    ============================== */
 
 .panel-header {
@@ -244,6 +387,68 @@ header h1 {
 
 .panel-header h2 {
   min-width: 0;
+}
+
+
+/* ==============================
+   DEMO
+   ============================== */
+
+.demo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.3rem;
+}
+
+.demo-counter {
+  flex-shrink: 0;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid var(--glass-border);
+  color: #fbbf24;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.limit-message {
+  display: none;
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.limit-message.active {
+  display: block;
+}
+
+.limit-message strong {
+  display: block;
+  color: #f87171;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.limit-message p {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin-bottom: 0.8rem;
+}
+
+.contact-demo-link {
+  display: inline-block;
+  text-decoration: none;
+  color: #0b132b;
+  background: var(--accent-gradient);
+  padding: 0.55rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 
@@ -368,6 +573,13 @@ input[type="time"] {
   box-shadow: 0 8px 20px rgba(212, 175, 55, 0.35);
 }
 
+.btn-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 
 /* ==============================
    LISTA DE TURNOS
@@ -427,7 +639,7 @@ input[type="time"] {
 
 
 /* ==============================
-   PARTE DERECHA DE LA TARJETA
+   PARTE DERECHA
    ============================== */
 
 .appointment-right {
@@ -522,7 +734,7 @@ input[type="time"] {
 
 
 /* ==============================
-   TOAST NOTIFICATIONS
+   TOAST
    ============================== */
 
 .toast-container {
@@ -559,6 +771,7 @@ input[type="time"] {
    ============================== */
 
 @keyframes fadeIn {
+
   from {
     opacity: 0;
     transform: translateY(-10px);
@@ -568,9 +781,11 @@ input[type="time"] {
     opacity: 1;
     transform: translateY(0);
   }
+
 }
 
 @keyframes fadeOut {
+
   from {
     opacity: 1;
     transform: translateY(0);
@@ -580,12 +795,30 @@ input[type="time"] {
     opacity: 0;
     transform: translateY(-10px);
   }
+
 }
 
 
 /* =========================================================
-   TABLETS Y PANTALLAS MEDIANAS
+   TABLETS
    ========================================================= */
+
+@media (max-width: 1100px) {
+
+  header {
+    flex-wrap: wrap;
+  }
+
+  .header-main {
+    min-width: 220px;
+  }
+
+  .user-panel {
+    margin-left: auto;
+  }
+
+}
+
 
 @media (max-width: 900px) {
 
@@ -616,6 +849,14 @@ input[type="time"] {
 
   body {
     padding: 1rem;
+  }
+
+  .auth-screen {
+    padding: 1rem;
+  }
+
+  .auth-box {
+    padding: 1.5rem;
   }
 
   .app-container {
@@ -669,6 +910,25 @@ input[type="time"] {
   }
 
 
+  /* Usuario */
+
+  .user-panel {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+
+  .user-info {
+    text-align: left;
+    min-width: 0;
+  }
+
+  .user-business,
+  .user-email {
+    max-width: 220px;
+  }
+
+
   /* Panels */
 
   .panel {
@@ -677,6 +937,17 @@ input[type="time"] {
 
   .panel h2 {
     font-size: 1.15rem;
+  }
+
+
+  /* Demo */
+
+  .demo-header {
+    align-items: flex-start;
+  }
+
+  .demo-counter {
+    font-size: 0.65rem;
   }
 
 
@@ -760,6 +1031,18 @@ input[type="time"] {
     padding: 0.75rem;
   }
 
+  .auth-box {
+    padding: 1.2rem;
+  }
+
+  .auth-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .auth-box h2 {
+    font-size: 1.15rem;
+  }
+
   .app-container {
     width: 100%;
   }
@@ -800,6 +1083,18 @@ input[type="time"] {
   }
 
 
+  /* Usuario */
+
+  .user-panel {
+    align-items: stretch;
+  }
+
+  .btn-logout {
+    padding: 0.5rem 0.65rem;
+    font-size: 0.72rem;
+  }
+
+
   /* Panels */
 
   .panel {
@@ -809,6 +1104,18 @@ input[type="time"] {
 
   .panel h2 {
     font-size: 1.05rem;
+  }
+
+
+  /* Demo */
+
+  .demo-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .demo-counter {
+    align-self: flex-start;
   }
 
 
@@ -838,7 +1145,7 @@ input[type="time"] {
   }
 
 
-  /* Tarjetas de turnos */
+  /* Tarjetas */
 
   .appointment-card {
     padding: 1rem;
