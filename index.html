@@ -1,122 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="description"
-    content="Turn Pro - Sistema profesional de gestión y control de turnos - Patric Soft"
-  >
-
-  <meta
-    name="author"
-    content="Patric Soft"
-  >
+  <meta name="description" content="Turn Pro - Sistema profesional de gestión y control de turnos - Patric Soft">
+  <meta name="author" content="Patric Soft">
 
   <title>Turn Pro | Patric Soft</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Google Fonts -->
-
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
-
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
-
-
-  <!-- CSS -->
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
-
+  <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
+  <div class="brand-badge">® Patric Soft</div>
 
-  <!-- ============================================
-       MARCA
-  ============================================= -->
-
-  <div class="brand-badge">
-    ® Patric Soft
-  </div>
-
-
-  <!-- ============================================
-       AUTENTICACIÓN
-  ============================================= -->
-
-  <section
-    id="auth-screen"
-    class="auth-screen"
-  >
+  <!-- AUTENTICACIÓN -->
+  <section id="auth-screen" class="auth-screen">
 
     <div class="auth-card">
 
-
       <div class="auth-header">
-
-        <div class="auth-logo">
-          TP
-        </div>
-
-        <h1>
-          Turn Pro
-        </h1>
-
-        <p>
-          Gestión profesional de turnos
-        </p>
-
+        <div class="auth-logo">TP</div>
+        <h1>Turn Pro</h1>
+        <p>Gestión profesional de turnos</p>
       </div>
 
+      <!-- LOGIN -->
+      <form id="login-form" class="auth-form">
 
-      <!-- ========================================
-           LOGIN
-      ========================================= -->
-
-      <form
-        id="login-form"
-        class="auth-form"
-      >
-
-        <h2>
-          Iniciar sesión
-        </h2>
+        <h2>Iniciar sesión</h2>
 
         <p class="auth-description">
           Accedé a tu panel de gestión.
         </p>
 
-
         <div class="form-group">
-
-          <label for="login-email">
-            Email
-          </label>
-
+          <label for="login-email">Email</label>
           <input
             type="email"
             id="login-email"
@@ -125,16 +50,10 @@
             autocomplete="email"
             required
           >
-
         </div>
 
-
         <div class="form-group">
-
-          <label for="login-password">
-            Contraseña
-          </label>
-
+          <label for="login-password">Contraseña</label>
           <input
             type="password"
             id="login-password"
@@ -143,23 +62,18 @@
             autocomplete="current-password"
             required
           >
-
         </div>
-
 
         <button
           type="submit"
           class="btn-submit"
           id="login-button"
         >
-          Iniciar sesión
+          🔐 Iniciar sesión
         </button>
 
-
         <p class="auth-switch">
-
           ¿No tenés una cuenta?
-
           <button
             type="button"
             id="show-register"
@@ -167,55 +81,34 @@
           >
             Crear cuenta
           </button>
-
         </p>
 
       </form>
 
+      <!-- REGISTRO -->
+      <form id="register-form" class="auth-form" hidden>
 
-      <!-- ========================================
-           REGISTRO
-      ========================================= -->
-
-      <form
-        id="register-form"
-        class="auth-form"
-        hidden
-      >
-
-        <h2>
-          Crear cuenta
-        </h2>
+        <h2>Crear cuenta</h2>
 
         <p class="auth-description">
           Comenzá a utilizar Turn Pro.
         </p>
 
-
         <div class="form-group">
-
-          <label for="register-business">
-            Nombre del negocio
-          </label>
-
+          <label for="register-business">Nombre del negocio</label>
           <input
             type="text"
             id="register-business"
             class="form-control"
-            placeholder="Ej: Barbería Premium"
+            placeholder="Ej: Barbería Augusto"
             maxlength="100"
+            autocomplete="organization"
             required
           >
-
         </div>
 
-
         <div class="form-group">
-
-          <label for="register-email">
-            Email
-          </label>
-
+          <label for="register-email">Email</label>
           <input
             type="email"
             id="register-email"
@@ -224,16 +117,10 @@
             autocomplete="email"
             required
           >
-
         </div>
 
-
         <div class="form-group">
-
-          <label for="register-password">
-            Contraseña
-          </label>
-
+          <label for="register-password">Contraseña</label>
           <input
             type="password"
             id="register-password"
@@ -243,16 +130,12 @@
             autocomplete="new-password"
             required
           >
-
         </div>
 
-
         <div class="form-group">
-
           <label for="register-password-confirm">
             Repetir contraseña
           </label>
-
           <input
             type="password"
             id="register-password-confirm"
@@ -262,23 +145,18 @@
             autocomplete="new-password"
             required
           >
-
         </div>
-
 
         <button
           type="submit"
           class="btn-submit"
           id="register-button"
         >
-          Crear cuenta
+          🚀 Crear cuenta
         </button>
 
-
         <p class="auth-switch">
-
           ¿Ya tenés una cuenta?
-
           <button
             type="button"
             id="show-login"
@@ -286,15 +164,9 @@
           >
             Iniciar sesión
           </button>
-
         </p>
 
       </form>
-
-
-      <!-- ========================================
-           ESTADO DE AUTENTICACIÓN
-      ========================================= -->
 
       <div
         id="auth-message"
@@ -302,116 +174,59 @@
         aria-live="polite"
       ></div>
 
-
     </div>
-
   </section>
 
 
-  <!-- ============================================
-       APLICACIÓN
-  ============================================= -->
-
+  <!-- APLICACIÓN -->
   <div
     id="app-screen"
     class="app-container"
     hidden
   >
 
-
-    <!-- ==========================================
-         HEADER
-    =========================================== -->
-
+    <!-- HEADER -->
     <header>
 
       <div>
-
-        <h1>
-          Gestión de Turnos
-        </h1>
+        <h1>Gestión de Turnos</h1>
 
         <p class="subtitle">
           Sistema profesional de control de citas y clientes
         </p>
 
-
-        <div
-          id="user-info"
-          class="user-info"
-        >
-
-          <strong id="user-business">
-            Mi Negocio
-          </strong>
-
+        <div id="user-info" class="user-info">
+          <strong id="user-business">Mi Negocio</strong>
           <span id="user-email"></span>
-
         </div>
-
       </div>
 
-
-      <!-- ========================================
-           ESTADÍSTICAS
-      ========================================== -->
-
+      <!-- ESTADÍSTICAS -->
       <div class="stats-container">
 
         <div class="stat-card">
-
-          <span>
-            Total
-          </span>
-
-          <strong id="stat-total">
-            0
-          </strong>
-
+          <span>Total</span>
+          <strong id="stat-total">0</strong>
         </div>
 
-
         <div class="stat-card">
-
-          <span>
-            Confirmados
-          </span>
-
-          <strong id="stat-confirmed">
-            0
-          </strong>
-
+          <span>Confirmados</span>
+          <strong id="stat-confirmed">0</strong>
         </div>
 
-
         <div class="stat-card">
-
-          <span>
-            Pendientes
-          </span>
-
-          <strong id="stat-pending">
-            0
-          </strong>
-
+          <span>Pendientes</span>
+          <strong id="stat-pending">0</strong>
         </div>
 
       </div>
 
-
-      <!-- ========================================
-           CUENTA
-      ========================================== -->
-
+      <!-- CUENTA -->
       <div class="account-area">
 
-        <span
-          id="plan-badge"
-          class="plan-badge"
-        >
+        <span id="plan-badge" class="plan-badge">
           DEMO
         </span>
-
 
         <button
           type="button"
@@ -426,43 +241,27 @@
     </header>
 
 
-    <!-- ==========================================
-         CONTENIDO PRINCIPAL
-    =========================================== -->
-
+    <!-- CONTENIDO -->
     <div class="main-content">
 
-
-      <!-- ========================================
-           PANEL DE RESERVA
-      ========================================= -->
-
+      <!-- NUEVO TURNO -->
       <div class="panel">
 
-        <h2>
-          Agendar Nuevo Turno
-        </h2>
-
-
-        <!-- Información del límite -->
+        <h2>Agendar Nuevo Turno</h2>
 
         <div
-          id="limit-info"
+          id="limit-message"
           class="limit-info"
-        ></div>
-
-
-        <form
-          id="appointment-form"
+          aria-live="polite"
         >
+          <span id="demo-counter">Demo: 0 / 3</span>
+          <span> turnos utilizados.</span>
+        </div>
 
+        <form id="appointment-form">
 
           <div class="form-group">
-
-            <label for="client-name">
-              Nombre Completo
-            </label>
-
+            <label for="client-name">Nombre Completo</label>
             <input
               type="text"
               id="client-name"
@@ -471,16 +270,10 @@
               maxlength="100"
               required
             >
-
           </div>
 
-
           <div class="form-group">
-
-            <label for="client-phone">
-              Teléfono / WhatsApp
-            </label>
-
+            <label for="client-phone">Teléfono / WhatsApp</label>
             <input
               type="tel"
               id="client-phone"
@@ -489,27 +282,17 @@
               maxlength="30"
               required
             >
-
           </div>
 
-
           <div class="form-group">
-
-            <label for="service-type">
-              Servicio
-            </label>
+            <label for="service-type">Servicio</label>
 
             <select
               id="service-type"
               class="form-control"
               required
             >
-
-              <option
-                value=""
-                disabled
-                selected
-              >
+              <option value="" disabled selected>
                 Seleccione un servicio
               </option>
 
@@ -524,17 +307,11 @@
               <option value="Asesoría Comercial">
                 Asesoría Comercial
               </option>
-
             </select>
-
           </div>
 
-
           <div class="form-group">
-
-            <label for="app-date">
-              Fecha
-            </label>
+            <label for="app-date">Fecha</label>
 
             <input
               type="date"
@@ -542,15 +319,10 @@
               class="form-control"
               required
             >
-
           </div>
 
-
           <div class="form-group">
-
-            <label for="app-time">
-              Hora
-            </label>
+            <label for="app-time">Hora</label>
 
             <input
               type="time"
@@ -558,36 +330,26 @@
               class="form-control"
               required
             >
-
           </div>
-
 
           <button
             type="submit"
             class="btn-submit"
-            id="submit-appointment"
+            id="btn-submit-appointment"
           >
             Reservar Turno
           </button>
 
         </form>
-
       </div>
 
 
-      <!-- ========================================
-           LISTA DE TURNOS
-      ========================================= -->
-
+      <!-- LISTA DE TURNOS -->
       <div class="panel">
-
 
         <div class="panel-header">
 
-          <h2>
-            Próximos Turnos
-          </h2>
-
+          <h2>Próximos Turnos</h2>
 
           <button
             id="btn-export"
@@ -600,11 +362,7 @@
 
         </div>
 
-
-        <!-- ======================================
-             FILTROS
-        ======================================= -->
-
+        <!-- FILTROS -->
         <div class="filter-bar">
 
           <input
@@ -614,12 +372,10 @@
             placeholder="🔍 Buscar cliente o servicio..."
           >
 
-
           <select
             id="filter-status"
             class="form-control filter-select"
           >
-
             <option value="todos">
               Todos los estados
             </option>
@@ -635,15 +391,9 @@
             <option value="cancelado">
               Cancelados
             </option>
-
           </select>
 
         </div>
-
-
-        <!-- ======================================
-             TURNOS
-        ======================================= -->
 
         <div
           id="appointments-container"
@@ -653,14 +403,10 @@
       </div>
 
     </div>
-
   </div>
 
 
-  <!-- ============================================
-       CONTACTO DESARROLLADOR
-  ============================================= -->
-
+  <!-- CONTACTO DESARROLLADOR -->
   <div class="developer-contact">
 
     <a
@@ -675,10 +421,7 @@
   </div>
 
 
-  <!-- ============================================
-       TOAST
-  ============================================= -->
-
+  <!-- TOAST -->
   <div
     id="toast-container"
     class="toast-container"
@@ -687,20 +430,11 @@
   ></div>
 
 
-  <!-- ============================================
-       SUPABASE
-  ============================================= -->
-
+  <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
-  <!-- ============================================
-       JAVASCRIPT
-  ============================================= -->
-
+  <!-- JAVASCRIPT -->
   <script src="script.js"></script>
 
-
 </body>
-
 </html>
