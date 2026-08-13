@@ -1,10 +1,4 @@
 // ============================================
-// TURN PRO | PATRIC SOFT
-// SCRIPT PRINCIPAL - SUPABASE
-// ============================================
-
-
-// ============================================
 // CONFIGURACIÓN SUPABASE
 // ============================================
 
@@ -22,27 +16,32 @@ const supabaseClient =
 
 
 // ============================================
-// CONFIGURACIÓN DEMO
+// CONFIGURACIÓN DE LA DEMO
 // ============================================
 
 const DEMO_LIMIT = 3;
 
 
 // ============================================
-// ESTADO DE LA APLICACIÓN
+// ESTADO LOCAL DE LA APLICACIÓN
 // ============================================
 
-let currentUser = null;
-let currentProfile = null;
 let appointments = [];
 
+let currentUser = null;
+
+let currentProfile = null;
+
 
 // ============================================
-// ELEMENTOS AUTH
+// ELEMENTOS DE AUTENTICACIÓN
 // ============================================
 
 const authScreen =
   document.getElementById('auth-screen');
+
+const appScreen =
+  document.getElementById('app-screen');
 
 const loginForm =
   document.getElementById('login-form');
@@ -59,27 +58,33 @@ const showLogin =
 const authMessage =
   document.getElementById('auth-message');
 
-const loginButton =
+const loginSubmit =
   document.getElementById('login-button');
 
-const registerButton =
+const registerSubmit =
   document.getElementById('register-button');
 
-const logoutButton =
+const btnLogout =
   document.getElementById('logout-button');
 
+const userBusiness =
+  document.getElementById('user-business');
+
+const userEmail =
+  document.getElementById('user-email');
+
+const planBadge =
+  document.getElementById('plan-badge');
+
 
 // ============================================
-// ELEMENTOS APP
+// ELEMENTOS DE LA APLICACIÓN
 // ============================================
 
-const appScreen =
-  document.getElementById('app-screen');
-
-const appointmentForm =
+const form =
   document.getElementById('appointment-form');
 
-const appointmentsContainer =
+const container =
   document.getElementById(
     'appointments-container'
   );
@@ -90,40 +95,169 @@ const searchInput =
 const filterStatus =
   document.getElementById('filter-status');
 
-const exportButton =
+const btnExport =
   document.getElementById('btn-export');
 
 const limitInfo =
   document.getElementById('limit-info');
 
-const submitAppointment =
+const btnSubmitAppointment =
   document.getElementById(
     'submit-appointment'
   );
 
-const userInfo =
-  document.getElementById('user-info');
 
-const planBadge =
-  document.getElementById('plan-badge');
+// ============================================
+// OBTENER CLAVE LOCAL DEL USUARIO
+// ============================================
+
+function getStorageKey() {
+
+  if (!currentUser) {
+    return null;
+  }
+
+  return `turnero_appointments_${currentUser.id}`;
+
+}
 
 
 // ============================================
-// ESTADÍSTICAS
+// CARGAR TURNOS DEL USUARIO
 // ============================================
 
-const statTotal =
-  document.getElementById('stat-total');
+function loadAppointments() {
 
-const statConfirmed =
-  document.getElementById('stat-confirmed');
+  const storageKey =
+    getStorageKey();
 
-const statPending =
-  document.getElementById('stat-pending');
+
+  if (!storageKey) {
+
+    appointments = [];
+
+    return;
+
+  }
+
+
+  try {
+
+    appointments =
+      JSON.parse(
+        localStorage.getItem(storageKey)
+      ) || [];
+
+  } catch (error) {
+
+    console.error(
+      'Error al cargar turnos:',
+      error
+    );
+
+    appointments = [];
+
+  }
+
+}
 
 
 // ============================================
-// MOSTRAR MENSAJE AUTH
+// INICIALIZAR FECHA MÍNIMA
+// ============================================
+
+function initializeDate() {
+
+  const dateInput =
+    document.getElementById('app-date');
+
+
+  if (!dateInput) {
+    return;
+  }
+
+
+  dateInput.min =
+    new Date()
+      .toISOString()
+      .split('T')[0];
+
+}
+
+
+// ============================================
+// GUARDAR DATOS
+// ============================================
+
+function saveData() {
+
+  const storageKey =
+    getStorageKey();
+
+
+  if (!storageKey) {
+    return;
+  }
+
+
+  localStorage.setItem(
+    storageKey,
+    JSON.stringify(appointments)
+  );
+
+
+  updateStats();
+
+  updateDemoStatus();
+
+}
+
+
+// ============================================
+// MOSTRAR TOAST
+// ============================================
+
+function showToast(message) {
+
+  const toastContainer =
+    document.getElementById(
+      'toast-container'
+    );
+
+
+  if (!toastContainer) {
+    return;
+  }
+
+
+  const toast =
+    document.createElement('div');
+
+
+  toast.className =
+    'toast';
+
+
+  toast.textContent =
+    message;
+
+
+  toastContainer.appendChild(
+    toast
+  );
+
+
+  setTimeout(() => {
+
+    toast.remove();
+
+  }, 3000);
+
+}
+
+
+// ============================================
+// MOSTRAR MENSAJE DE AUTH
 // ============================================
 
 function showAuthMessage(
@@ -135,11 +269,14 @@ function showAuthMessage(
     return;
   }
 
+
   authMessage.textContent =
     message;
 
+
   authMessage.className =
     `auth-message ${type}`;
+
 }
 
 
@@ -153,45 +290,13 @@ function clearAuthMessage() {
     return;
   }
 
+
   authMessage.textContent =
     '';
 
   authMessage.className =
     'auth-message';
-}
 
-
-// ============================================
-// TOAST
-// ============================================
-
-function showToast(message) {
-
-  const toastContainer =
-    document.getElementById(
-      'toast-container'
-    );
-
-  if (!toastContainer) {
-    return;
-  }
-
-  const toast =
-    document.createElement('div');
-
-  toast.className =
-    'toast';
-
-  toast.textContent =
-    message;
-
-  toastContainer.appendChild(
-    toast
-  );
-
-  setTimeout(() => {
-    toast.remove();
-  }, 3000);
 }
 
 
@@ -202,422 +307,487 @@ function showToast(message) {
 function showLoginScreen() {
 
   if (authScreen) {
-    authScreen.hidden = false;
-    authScreen.style.display = 'flex';
+
+    authScreen.hidden =
+      false;
+
+    authScreen.style.display =
+      'flex';
+
   }
+
 
   if (appScreen) {
-    appScreen.hidden = true;
-  }
 
-  currentUser = null;
-  currentProfile = null;
-  appointments = [];
-}
-
-
-// ============================================
-// MOSTRAR APLICACIÓN
-// ============================================
-
-function showAppScreen() {
-
-  if (authScreen) {
-    authScreen.hidden = true;
-    authScreen.style.display = 'none';
-  }
-
-  if (appScreen) {
-    appScreen.hidden = false;
-  }
-}
-
-
-// ============================================
-// CAMBIAR A REGISTRO
-// ============================================
-
-showRegister?.addEventListener(
-  'click',
-  () => {
-
-    if (loginForm) {
-      loginForm.hidden = true;
-    }
-
-    if (registerForm) {
-      registerForm.hidden = false;
-    }
-
-    clearAuthMessage();
-  }
-);
-
-
-// ============================================
-// CAMBIAR A LOGIN
-// ============================================
-
-showLogin?.addEventListener(
-  'click',
-  () => {
-
-    if (registerForm) {
-      registerForm.hidden = true;
-    }
-
-    if (loginForm) {
-      loginForm.hidden = false;
-    }
-
-    clearAuthMessage();
-  }
-);
-
-
-// ============================================
-// REGISTRO
-// ============================================
-
-registerForm?.addEventListener(
-  'submit',
-  async event => {
-
-    event.preventDefault();
-
-    clearAuthMessage();
-
-    const email =
-      document
-        .getElementById(
-          'register-email'
-        )
-        ?.value
-        .trim();
-
-    const password =
-      document
-        .getElementById(
-          'register-password'
-        )
-        ?.value;
-
-    const passwordConfirm =
-      document
-        .getElementById(
-          'register-password-confirm'
-        )
-        ?.value;
-
-
-    if (
-      !email ||
-      !password ||
-      !passwordConfirm
-    ) {
-
-      showAuthMessage(
-        'Completá todos los campos.'
-      );
-
-      return;
-    }
-
-
-    if (password.length < 6) {
-
-      showAuthMessage(
-        'La contraseña debe tener al menos 6 caracteres.'
-      );
-
-      return;
-    }
-
-
-    if (password !== passwordConfirm) {
-
-      showAuthMessage(
-        'Las contraseñas no coinciden.'
-      );
-
-      return;
-    }
-
-
-    registerButton.disabled =
+    appScreen.hidden =
       true;
 
-    registerButton.textContent =
-      '⏳ Creando cuenta...';
+    appScreen.style.display =
+      'none';
+
+  }
 
 
-    try {
+  currentUser = null;
 
-      const {
-        data,
-        error
-      } =
-        await supabaseClient.auth.signUp({
+  currentProfile = null;
 
-          email,
+  appointments = [];
 
-          password
-
-        });
+}
 
 
-      if (error) {
-        throw error;
+// ============================================
+// MOSTRAR REGISTRO
+// ============================================
+
+if (showRegister) {
+
+  showRegister.addEventListener(
+    'click',
+    () => {
+
+      if (loginForm) {
+        loginForm.hidden = true;
       }
 
-
-      if (!data.user) {
-
-        throw new Error(
-          'No se pudo crear la cuenta.'
-        );
+      if (registerForm) {
+        registerForm.hidden = false;
       }
 
+      clearAuthMessage();
 
-      showAuthMessage(
-        '¡Cuenta creada correctamente! Ya podés iniciar sesión.',
-        'success'
-      );
+    }
+  );
 
-
-      registerForm.reset();
+}
 
 
-      setTimeout(() => {
+// ============================================
+// MOSTRAR LOGIN
+// ============================================
 
-        registerForm.hidden =
-          true;
+if (showLogin) {
 
-        loginForm.hidden =
-          false;
+  showLogin.addEventListener(
+    'click',
+    () => {
 
-        clearAuthMessage();
+      if (registerForm) {
+        registerForm.hidden = true;
+      }
 
-      }, 1800);
+      if (loginForm) {
+        loginForm.hidden = false;
+      }
+
+      clearAuthMessage();
+
+    }
+  );
+
+}
 
 
-    } catch (error) {
+// ============================================
+// REGISTRO DE USUARIO
+// ============================================
 
-      console.error(
-        'Error de registro:',
-        error
-      );
+if (registerForm) {
+
+  registerForm.addEventListener(
+    'submit',
+    async event => {
+
+      event.preventDefault();
 
 
-      let message =
-        'No se pudo crear la cuenta.';
+      const businessName =
+        document
+          .getElementById(
+            'register-business'
+          )
+          ?.value
+          .trim();
+
+
+      const email =
+        document
+          .getElementById(
+            'register-email'
+          )
+          ?.value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById(
+            'register-password'
+          )
+          ?.value;
+
+
+      const passwordConfirm =
+        document
+          .getElementById(
+            'register-password-confirm'
+          )
+          ?.value;
 
 
       if (
-        error.message
-          ?.toLowerCase()
-          .includes(
-            'already registered'
-          )
+        !businessName ||
+        !email ||
+        !password ||
+        !passwordConfirm
       ) {
 
-        message =
-          'Ese correo electrónico ya está registrado.';
-
-      } else if (
-        error.message
-          ?.toLowerCase()
-          .includes(
-            'password'
-          )
-      ) {
-
-        message =
-          'La contraseña no cumple los requisitos.';
-
-      } else if (
-        error.message
-      ) {
-
-        message =
-          error.message;
-      }
-
-
-      showAuthMessage(
-        message
-      );
-
-    } finally {
-
-      registerButton.disabled =
-        false;
-
-      registerButton.textContent =
-        'Crear cuenta';
-    }
-  }
-);
-
-
-// ============================================
-// LOGIN
-// ============================================
-
-loginForm?.addEventListener(
-  'submit',
-  async event => {
-
-    event.preventDefault();
-
-    clearAuthMessage();
-
-
-    const email =
-      document
-        .getElementById(
-          'login-email'
-        )
-        ?.value
-        .trim();
-
-    const password =
-      document
-        .getElementById(
-          'login-password'
-        )
-        ?.value;
-
-
-    if (!email || !password) {
-
-      showAuthMessage(
-        'Completá tu correo y contraseña.'
-      );
-
-      return;
-    }
-
-
-    loginButton.disabled =
-      true;
-
-    loginButton.textContent =
-      '⏳ Ingresando...';
-
-
-    try {
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient.auth.signInWithPassword({
-
-          email,
-
-          password
-
-        });
-
-
-      if (error) {
-        throw error;
-      }
-
-
-      if (!data.session) {
-
-        throw new Error(
-          'No se pudo iniciar la sesión.'
+        showAuthMessage(
+          'Completá todos los campos.'
         );
+
+        return;
+
       }
 
 
-      showToast(
-        '¡Inicio de sesión correcto!'
-      );
+      if (
+        password.length < 6
+      ) {
 
+        showAuthMessage(
+          'La contraseña debe tener al menos 6 caracteres.'
+        );
 
-    } catch (error) {
+        return;
 
-      console.error(
-        'Error de login:',
-        error
-      );
-
-
-      showAuthMessage(
-        'Correo o contraseña incorrectos.'
-      );
-
-
-    } finally {
-
-      loginButton.disabled =
-        false;
-
-      loginButton.textContent =
-        'Iniciar sesión';
-    }
-  }
-);
-
-
-// ============================================
-// LOGOUT
-// ============================================
-
-logoutButton?.addEventListener(
-  'click',
-  async () => {
-
-    logoutButton.disabled =
-      true;
-
-
-    try {
-
-      const {
-        error
-      } =
-        await supabaseClient.auth.signOut();
-
-
-      if (error) {
-        throw error;
       }
 
 
-      showToast(
-        'Sesión cerrada correctamente.'
-      );
+      if (
+        password !==
+        passwordConfirm
+      ) {
+
+        showAuthMessage(
+          'Las contraseñas no coinciden.'
+        );
+
+        return;
+
+      }
 
 
-    } catch (error) {
+      if (registerSubmit) {
 
-      console.error(
-        'Error cerrando sesión:',
-        error
-      );
+        registerSubmit.disabled =
+          true;
 
+        registerSubmit.textContent =
+          '⏳ Creando cuenta...';
 
-      showToast(
-        'No se pudo cerrar la sesión.'
-      );
+      }
 
 
-    } finally {
+      try {
 
-      logoutButton.disabled =
-        false;
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.auth.signUp({
+
+            email,
+
+            password,
+
+            options: {
+
+              data: {
+
+                business_name:
+                  businessName
+
+              }
+
+            }
+
+          });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        if (!data.user) {
+
+          throw new Error(
+            'No se pudo crear la cuenta.'
+          );
+
+        }
+
+
+        showAuthMessage(
+          '¡Cuenta creada correctamente! Ahora podés iniciar sesión.',
+          'success'
+        );
+
+
+        registerForm.reset();
+
+
+        setTimeout(() => {
+
+          registerForm.hidden =
+            true;
+
+          loginForm.hidden =
+            false;
+
+          clearAuthMessage();
+
+        }, 1500);
+
+
+      } catch (error) {
+
+        console.error(
+          'Error de registro:',
+          error
+        );
+
+
+        let message =
+          'No se pudo crear la cuenta.';
+
+
+        if (
+          error.message
+            ?.toLowerCase()
+            .includes(
+              'already registered'
+            )
+        ) {
+
+          message =
+            'Ese correo electrónico ya está registrado.';
+
+        } else if (
+          error.message
+            ?.toLowerCase()
+            .includes('password')
+        ) {
+
+          message =
+            'La contraseña no cumple los requisitos.';
+
+        } else if (
+          error.message
+        ) {
+
+          message =
+            error.message;
+
+        }
+
+
+        showAuthMessage(
+          message
+        );
+
+
+      } finally {
+
+        if (registerSubmit) {
+
+          registerSubmit.disabled =
+            false;
+
+          registerSubmit.textContent =
+            'Crear cuenta';
+
+        }
+
+      }
+
     }
-  }
-);
+  );
+
+}
 
 
 // ============================================
-// CARGAR PERFIL
+// INICIO DE SESIÓN
+// ============================================
+
+if (loginForm) {
+
+  loginForm.addEventListener(
+    'submit',
+    async event => {
+
+      event.preventDefault();
+
+
+      const email =
+        document
+          .getElementById(
+            'login-email'
+          )
+          ?.value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById(
+            'login-password'
+          )
+          ?.value;
+
+
+      if (!email || !password) {
+
+        showAuthMessage(
+          'Completá tu correo y contraseña.'
+        );
+
+        return;
+
+      }
+
+
+      if (loginSubmit) {
+
+        loginSubmit.disabled =
+          true;
+
+        loginSubmit.textContent =
+          '⏳ Ingresando...';
+
+      }
+
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.auth.signInWithPassword({
+
+            email,
+
+            password
+
+          });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        if (!data.session) {
+
+          throw new Error(
+            'No se pudo iniciar la sesión.'
+          );
+
+        }
+
+
+        showToast(
+          '¡Inicio de sesión correcto!'
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          'Error de inicio de sesión:',
+          error
+        );
+
+
+        showAuthMessage(
+          'Correo o contraseña incorrectos.'
+        );
+
+
+      } finally {
+
+        if (loginSubmit) {
+
+          loginSubmit.disabled =
+            false;
+
+          loginSubmit.textContent =
+            'Iniciar sesión';
+
+        }
+
+      }
+
+    }
+  );
+
+}
+
+
+// ============================================
+// CERRAR SESIÓN
+// ============================================
+
+if (btnLogout) {
+
+  btnLogout.addEventListener(
+    'click',
+    async () => {
+
+      try {
+
+        const {
+          error
+        } =
+          await supabaseClient.auth.signOut();
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        showToast(
+          'Sesión cerrada correctamente.'
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          'Error al cerrar sesión:',
+          error
+        );
+
+
+        showToast(
+          'No se pudo cerrar la sesión.'
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+// ============================================
+// OBTENER PERFIL
 // ============================================
 
 async function loadProfile() {
@@ -644,39 +814,35 @@ async function loadProfile() {
 
 
     if (error) {
-      throw error;
+
+      console.warn(
+        'No se pudo cargar el perfil:',
+        error
+      );
+
+      return;
+
     }
 
 
     currentProfile =
-      data;
-
-
-    if (!currentProfile) {
-
-      console.warn(
-        'El usuario no tiene perfil todavía.'
-      );
-
-      return;
-    }
-
-
-    updateUserInterface();
+      data || null;
 
 
   } catch (error) {
 
-    console.error(
+    console.warn(
       'Error cargando perfil:',
       error
     );
+
   }
+
 }
 
 
 // ============================================
-// ACTUALIZAR INTERFAZ DEL USUARIO
+// ACTUALIZAR INFORMACIÓN DEL USUARIO
 // ============================================
 
 function updateUserInterface() {
@@ -686,109 +852,44 @@ function updateUserInterface() {
   }
 
 
+  const metadata =
+    currentUser.user_metadata || {};
+
+
   const businessName =
     currentProfile?.business_name ||
-    'Mi Negocio';
+    metadata.business_name ||
+    'Mi negocio';
 
 
-  if (userInfo) {
+  if (userBusiness) {
 
-    userInfo.innerHTML = `
+    userBusiness.textContent =
+      businessName;
 
-      <strong>
-        ${escapeHtml(businessName)}
-      </strong>
-
-      <span>
-        ${escapeHtml(
-          currentUser.email || ''
-        )}
-      </span>
-
-    `;
   }
 
 
-  const plan =
-    currentProfile?.plan ||
-    'demo';
+  if (userEmail) {
+
+    userEmail.textContent =
+      currentUser.email || '';
+
+  }
 
 
   if (planBadge) {
 
+    const plan =
+      currentProfile?.plan ||
+      'demo';
+
+
     planBadge.textContent =
       plan.toUpperCase();
-  }
-}
 
-
-// ============================================
-// CARGAR TURNOS DESDE SUPABASE
-// ============================================
-
-async function loadAppointments() {
-
-  if (!currentUser) {
-    appointments = [];
-    return;
   }
 
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from('appointments')
-        .select('*')
-        .eq(
-          'user_id',
-          currentUser.id
-        )
-        .order(
-          'date',
-          {
-            ascending: true
-          }
-        )
-        .order(
-          'time',
-          {
-            ascending: true
-          }
-        );
-
-
-    if (error) {
-      throw error;
-    }
-
-
-    appointments =
-      data || [];
-
-
-    renderAppointments();
-
-    updateStats();
-
-    updateDemoStatus();
-
-
-  } catch (error) {
-
-    console.error(
-      'Error cargando turnos:',
-      error
-    );
-
-
-    showToast(
-      'No se pudieron cargar los turnos.'
-    );
-  }
 }
 
 
@@ -805,6 +906,7 @@ async function showApplication(
     showLoginScreen();
 
     return;
+
   }
 
 
@@ -812,20 +914,54 @@ async function showApplication(
     session.user;
 
 
-  showAppScreen();
-
-
   await loadProfile();
 
-  await loadAppointments();
+
+  updateUserInterface();
+
+
+  loadAppointments();
+
+
+  // Ocultar login
+
+  if (authScreen) {
+
+    authScreen.hidden =
+      true;
+
+    authScreen.style.display =
+      'none';
+
+  }
+
+
+  // Mostrar aplicación
+
+  if (appScreen) {
+
+    appScreen.hidden =
+      false;
+
+    appScreen.style.display =
+      'block';
+
+  }
 
 
   initializeDate();
+
+  renderAppointments();
+
+  updateStats();
+
+  updateDemoStatus();
+
 }
 
 
 // ============================================
-// SESIÓN INICIAL
+// CONTROL DE SESIÓN
 // ============================================
 
 async function checkSession() {
@@ -833,26 +969,23 @@ async function checkSession() {
   try {
 
     const {
-      data,
-      error
+      data: {
+        session
+      }
     } =
       await supabaseClient.auth.getSession();
 
 
-    if (error) {
-      throw error;
-    }
-
-
-    if (data.session) {
+    if (session) {
 
       await showApplication(
-        data.session
+        session
       );
 
     } else {
 
       showLoginScreen();
+
     }
 
 
@@ -864,12 +997,14 @@ async function checkSession() {
     );
 
     showLoginScreen();
+
   }
+
 }
 
 
 // ============================================
-// CAMBIOS DE SESIÓN
+// DETECTAR CAMBIOS DE SESIÓN
 // ============================================
 
 supabaseClient.auth.onAuthStateChange(
@@ -878,232 +1013,185 @@ supabaseClient.auth.onAuthStateChange(
     session
   ) => {
 
-    console.log(
-      'Auth event:',
-      event
-    );
-
-
     if (
       session &&
       (
-        event ===
-          'SIGNED_IN' ||
-
-        event ===
-          'INITIAL_SESSION' ||
-
-        event ===
-          'TOKEN_REFRESHED'
+        event === 'SIGNED_IN' ||
+        event === 'INITIAL_SESSION' ||
+        event === 'TOKEN_REFRESHED'
       )
     ) {
 
       await showApplication(
         session
       );
+
     }
 
 
     if (
-      event ===
-      'SIGNED_OUT'
+      event === 'SIGNED_OUT'
     ) {
 
       showLoginScreen();
+
     }
+
   }
 );
 
 
 // ============================================
-// FECHA MÍNIMA
-// ============================================
-
-function initializeDate() {
-
-  const dateInput =
-    document.getElementById(
-      'app-date'
-    );
-
-
-  if (!dateInput) {
-    return;
-  }
-
-
-  const today =
-    new Date()
-      .toISOString()
-      .split('T')[0];
-
-
-  dateInput.min =
-    today;
-}
-
-
-// ============================================
-// ESTADÍSTICAS
+// ACTUALIZAR MÉTRICAS
 // ============================================
 
 function updateStats() {
 
-  if (statTotal) {
+  const totalElement =
+    document.getElementById(
+      'stat-total'
+    );
 
-    statTotal.textContent =
+  const confirmedElement =
+    document.getElementById(
+      'stat-confirmed'
+    );
+
+  const pendingElement =
+    document.getElementById(
+      'stat-pending'
+    );
+
+
+  if (totalElement) {
+
+    totalElement.textContent =
       appointments.length;
+
   }
 
 
-  if (statConfirmed) {
+  if (confirmedElement) {
 
-    statConfirmed.textContent =
+    confirmedElement.textContent =
       appointments.filter(
-        appointment =>
-          appointment.status ===
+        app =>
+          app.status ===
           'confirmado'
       ).length;
+
   }
 
 
-  if (statPending) {
+  if (pendingElement) {
 
-    statPending.textContent =
+    pendingElement.textContent =
       appointments.filter(
-        appointment =>
-          appointment.status ===
+        app =>
+          app.status ===
           'pendiente'
       ).length;
+
   }
+
 }
 
 
 // ============================================
-// ESTADO DEMO
+// ACTUALIZAR ESTADO DE LA DEMO
 // ============================================
 
 function updateDemoStatus() {
-
-  const isDemo =
-    (
-      currentProfile?.plan ||
-      'demo'
-    ) === 'demo';
-
-
-  const count =
-    appointments.length;
-
 
   if (!limitInfo) {
     return;
   }
 
 
-  if (!isDemo) {
-
-    limitInfo.innerHTML =
-      'Plan activo: <strong>sin límite de demo</strong>';
-
-    limitInfo.classList.remove(
-      'active'
-    );
-
-    if (submitAppointment) {
-      submitAppointment.disabled =
-        false;
-
-      submitAppointment.textContent =
-        'Reservar Turno';
-    }
-
-    appointmentForm
-      ?.querySelectorAll(
-        'input, select'
-      )
-      .forEach(
-        element => {
-          element.disabled =
-            false;
-        }
-      );
-
-    return;
-  }
+  const count =
+    appointments.length;
 
 
-  if (count >= DEMO_LIMIT) {
+  const limitReached =
+    count >= DEMO_LIMIT;
 
-    limitInfo.innerHTML = `
-      🔒 Demo finalizada:
-      <strong>${count} / ${DEMO_LIMIT}</strong>
-      turnos utilizados.
-    `;
 
+  limitInfo.textContent =
+    `🎯 Demo: ${count} / ${DEMO_LIMIT} turnos utilizados.`;
+
+
+  if (limitReached) {
 
     limitInfo.classList.add(
       'active'
     );
 
 
-    appointmentForm
-      ?.querySelectorAll(
-        'input, select'
-      )
-      .forEach(
-        element => {
-          element.disabled =
-            true;
-        }
-      );
+    if (form) {
 
+      form
+        .querySelectorAll(
+          'input, select'
+        )
+        .forEach(
+          element => {
 
-    if (submitAppointment) {
+            element.disabled =
+              true;
 
-      submitAppointment.disabled =
-        true;
+          }
+        );
 
-      submitAppointment.textContent =
-        '🔒 Demo finalizada';
     }
 
 
+    if (btnSubmitAppointment) {
+
+      btnSubmitAppointment.disabled =
+        true;
+
+      btnSubmitAppointment.textContent =
+        '🔒 Demo finalizada';
+
+    }
+
   } else {
-
-    limitInfo.innerHTML = `
-      🎯 Demo:
-      <strong>${count} / ${DEMO_LIMIT}</strong>
-      turnos utilizados.
-    `;
-
 
     limitInfo.classList.remove(
       'active'
     );
 
 
-    appointmentForm
-      ?.querySelectorAll(
-        'input, select'
-      )
-      .forEach(
-        element => {
-          element.disabled =
-            false;
-        }
-      );
+    if (form) {
+
+      form
+        .querySelectorAll(
+          'input, select'
+        )
+        .forEach(
+          element => {
+
+            element.disabled =
+              false;
+
+          }
+        );
+
+    }
 
 
-    if (submitAppointment) {
+    if (btnSubmitAppointment) {
 
-      submitAppointment.disabled =
+      btnSubmitAppointment.disabled =
         false;
 
-      submitAppointment.textContent =
+      btnSubmitAppointment.textContent =
         'Reservar Turno';
+
     }
+
   }
+
 }
 
 
@@ -1124,6 +1212,7 @@ function escapeHtml(text) {
 
 
   return div.innerHTML;
+
 }
 
 
@@ -1133,18 +1222,18 @@ function escapeHtml(text) {
 
 function renderAppointments() {
 
-  if (!appointmentsContainer) {
+  if (!container) {
     return;
   }
 
 
-  appointmentsContainer.innerHTML =
+  container.innerHTML =
     '';
 
 
   const searchTerm =
     searchInput?.value
-      ?.toLowerCase()
+      .toLowerCase()
       .trim() || '';
 
 
@@ -1154,71 +1243,51 @@ function renderAppointments() {
 
 
   const filtered =
-    appointments
-      .filter(
-        appointment => {
+    appointments.filter(
+      app => {
 
-          const name =
-            String(
-              appointment.name || ''
-            ).toLowerCase();
-
-
-          const service =
-            String(
-              appointment.service || ''
-            ).toLowerCase();
+        const name =
+          String(
+            app.name || ''
+          ).toLowerCase();
 
 
-          const matchesSearch =
-            name.includes(
-              searchTerm
-            ) ||
-            service.includes(
-              searchTerm
-            );
+        const service =
+          String(
+            app.service || ''
+          ).toLowerCase();
 
 
-          const matchesStatus =
-            selectedStatus ===
-              'todos' ||
-
-            appointment.status ===
-              selectedStatus;
-
-
-          return (
-            matchesSearch &&
-            matchesStatus
+        const matchesSearch =
+          name.includes(
+            searchTerm
+          ) ||
+          service.includes(
+            searchTerm
           );
-        }
-      )
-      .sort(
-        (a, b) => {
-
-          const dateA =
-            new Date(
-              `${a.date}T${a.time}`
-            );
 
 
-          const dateB =
-            new Date(
-              `${b.date}T${b.time}`
-            );
+        const matchesStatus =
+          selectedStatus ===
+            'todos' ||
+          app.status ===
+            selectedStatus;
 
 
-          return dateA - dateB;
-        }
-      );
+        return (
+          matchesSearch &&
+          matchesStatus
+        );
+
+      }
+    );
 
 
   if (
-    filtered.length ===
-    0
+    filtered.length === 0
   ) {
 
-    appointmentsContainer.innerHTML = `
+    container.innerHTML = `
 
       <div class="empty-state">
 
@@ -1230,12 +1299,31 @@ function renderAppointments() {
 
     `;
 
+
+    updateStats();
+
     return;
+
   }
 
 
+  // Ordenar por fecha y hora
+
+  filtered.sort(
+    (a, b) =>
+      new Date(
+        `${a.date}T${a.time}`
+      ) -
+      new Date(
+        `${b.date}T${b.time}`
+      )
+  );
+
+
+  // Crear tarjetas
+
   filtered.forEach(
-    appointment => {
+    app => {
 
       const card =
         document.createElement(
@@ -1247,58 +1335,28 @@ function renderAppointments() {
         'appointment-card';
 
 
+      // WhatsApp
+
       const cleanPhone =
         String(
-          appointment.phone || ''
+          app.phone || ''
         ).replace(
           /[^0-9]/g,
           ''
         );
 
 
-      const whatsappMessage =
+      const wsText =
         encodeURIComponent(
-          `Hola ${appointment.name}, te contactamos desde Patric Soft para recordar tu turno de ${appointment.service} el día ${appointment.date} a las ${appointment.time} hs.`
+          `Hola ${app.name}, te contactamos desde Patric Soft para recordar tu turno de ${app.service} el día ${app.date} a las ${app.time} hs.`
         );
 
 
       const whatsappUrl =
-        `https://wa.me/${cleanPhone}?text=${whatsappMessage}`;
+        `https://wa.me/${cleanPhone}?text=${wsText}`;
 
 
-      const confirmButton =
-        appointment.status !==
-        'confirmado'
-          ? `
-            <button
-              type="button"
-              class="btn-action"
-              onclick="changeStatus('${appointment.id}', 'confirmado')"
-              title="Confirmar"
-              aria-label="Confirmar turno"
-            >
-              ✓
-            </button>
-          `
-          : '';
-
-
-      const cancelButton =
-        appointment.status !==
-        'cancelado'
-          ? `
-            <button
-              type="button"
-              class="btn-action"
-              onclick="changeStatus('${appointment.id}', 'cancelado')"
-              title="Cancelar"
-              aria-label="Cancelar turno"
-            >
-              ✕
-            </button>
-          `
-          : '';
-
+      // Tarjeta
 
       card.innerHTML = `
 
@@ -1306,35 +1364,33 @@ function renderAppointments() {
 
           <h3>
             ${escapeHtml(
-              appointment.name
+              app.name
             )}
           </h3>
+
 
           <p>
 
             <span>
-              📌
-              ${escapeHtml(
-                appointment.service
+              📌 ${escapeHtml(
+                app.service
               )}
             </span>
 
             <span>
-              📅
-              ${escapeHtml(
-                appointment.date
+              📅 ${escapeHtml(
+                app.date
               )}
               -
               ${escapeHtml(
-                appointment.time
+                app.time
               )}
               hs
             </span>
 
             <span>
-              📞
-              ${escapeHtml(
-                appointment.phone
+              📞 ${escapeHtml(
+                app.phone
               )}
             </span>
 
@@ -1347,16 +1403,17 @@ function renderAppointments() {
 
           <span
             class="status-badge status-${escapeHtml(
-              appointment.status
+              app.status
             )}"
           >
             ${escapeHtml(
-              appointment.status
+              app.status
             )}
           </span>
 
 
           <div class="app-actions">
+
 
             <a
               href="${whatsappUrl}"
@@ -1370,21 +1427,60 @@ function renderAppointments() {
             </a>
 
 
-            ${confirmButton}
+            ${
+              app.status !==
+              'confirmado'
+
+                ? `
+
+                  <button
+                    type="button"
+                    class="btn-action"
+                    onclick="changeStatus('${app.id}', 'confirmado')"
+                    title="Confirmar"
+                    aria-label="Confirmar turno"
+                  >
+                    ✓
+                  </button>
+
+                `
+
+                : ''
+            }
 
 
-            ${cancelButton}
+            ${
+              app.status !==
+              'cancelado'
+
+                ? `
+
+                  <button
+                    type="button"
+                    class="btn-action"
+                    onclick="changeStatus('${app.id}', 'cancelado')"
+                    title="Cancelar"
+                    aria-label="Cancelar turno"
+                  >
+                    ✕
+                  </button>
+
+                `
+
+                : ''
+            }
 
 
             <button
               type="button"
               class="btn-action"
-              onclick="deleteAppointment('${appointment.id}')"
+              onclick="deleteAppointment('${app.id}')"
               title="Eliminar"
               aria-label="Eliminar turno"
             >
               🗑
             </button>
+
 
           </div>
 
@@ -1393,202 +1489,167 @@ function renderAppointments() {
       `;
 
 
-      appointmentsContainer.appendChild(
+      container.appendChild(
         card
       );
+
     }
   );
+
+
+  updateStats();
+
 }
 
 
 // ============================================
-// CREAR TURNO
+// AGREGAR NUEVO TURNO
 // ============================================
 
-appointmentForm?.addEventListener(
-  'submit',
-  async event => {
+if (form) {
 
-    event.preventDefault();
+  form.addEventListener(
+    'submit',
+    event => {
 
-
-    if (!currentUser) {
-
-      showToast(
-        'Debés iniciar sesión.'
-      );
-
-      return;
-    }
+      event.preventDefault();
 
 
-    const isDemo =
-      (
-        currentProfile?.plan ||
-        'demo'
-      ) === 'demo';
+      if (!currentUser) {
 
-
-    if (
-      isDemo &&
-      appointments.length >=
-        DEMO_LIMIT
-    ) {
-
-      showToast(
-        'La demo gratuita ya alcanzó sus 3 turnos.'
-      );
-
-      updateDemoStatus();
-
-      return;
-    }
-
-
-    const name =
-      document
-        .getElementById(
-          'client-name'
-        )
-        ?.value
-        .trim();
-
-
-    const phone =
-      document
-        .getElementById(
-          'client-phone'
-        )
-        ?.value
-        .trim();
-
-
-    const service =
-      document
-        .getElementById(
-          'service-type'
-        )
-        ?.value;
-
-
-    const date =
-      document
-        .getElementById(
-          'app-date'
-        )
-        ?.value;
-
-
-    const time =
-      document
-        .getElementById(
-          'app-time'
-        )
-        ?.value;
-
-
-    if (
-      !name ||
-      !phone ||
-      !service ||
-      !date ||
-      !time
-    ) {
-
-      showToast(
-        'Completá todos los campos.'
-      );
-
-      return;
-    }
-
-
-    submitAppointment.disabled =
-      true;
-
-    submitAppointment.textContent =
-      '⏳ Guardando...';
-
-
-    try {
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient
-          .from('appointments')
-          .insert({
-
-            user_id:
-              currentUser.id,
-
-            name,
-
-            phone,
-
-            service,
-
-            date,
-
-            time,
-
-            status:
-              'pendiente'
-
-          })
-          .select()
-          .single();
-
-
-      if (error) {
-        throw error;
-      }
-
-
-      if (data) {
-
-        appointments.push(
-          data
+        showToast(
+          'Debés iniciar sesión para registrar un turno.'
         );
+
+        return;
+
       }
 
 
-      appointmentForm.reset();
+      // Control de demo
 
-      initializeDate();
+      if (
+        appointments.length >=
+        DEMO_LIMIT
+      ) {
+
+        showToast(
+          'La demo gratuita ya alcanzó sus 3 turnos.'
+        );
+
+        updateDemoStatus();
+
+        return;
+
+      }
+
+
+      const name =
+        document
+          .getElementById(
+            'client-name'
+          )
+          ?.value
+          .trim();
+
+
+      const phone =
+        document
+          .getElementById(
+            'client-phone'
+          )
+          ?.value
+          .trim();
+
+
+      const service =
+        document
+          .getElementById(
+            'service-type'
+          )
+          ?.value;
+
+
+      const date =
+        document
+          .getElementById(
+            'app-date'
+          )
+          ?.value;
+
+
+      const time =
+        document
+          .getElementById(
+            'app-time'
+          )
+          ?.value;
+
+
+      if (
+        !name ||
+        !phone ||
+        !service ||
+        !date ||
+        !time
+      ) {
+
+        showToast(
+          'Completá todos los datos del turno.'
+        );
+
+        return;
+
+      }
+
+
+      const newApp = {
+
+        id:
+          `${Date.now()}-${Math.random()
+            .toString(36)
+            .slice(2, 8)}`,
+
+        name,
+
+        phone,
+
+        service,
+
+        date,
+
+        time,
+
+        status:
+          'pendiente'
+
+      };
+
+
+      appointments.push(
+        newApp
+      );
+
+
+      saveData();
 
       renderAppointments();
 
-      updateStats();
 
-      updateDemoStatus();
-
-
-      showToast(
-        '✅ Turno registrado correctamente.'
-      );
+      form.reset();
 
 
-    } catch (error) {
-
-      console.error(
-        'Error creando turno:',
-        error
-      );
+      initializeDate();
 
 
       showToast(
-        '❌ No se pudo guardar el turno.'
+        'Turno registrado con éxito'
       );
 
-
-    } finally {
-
-      updateDemoStatus();
     }
-  }
-);
+  );
+
+}
 
 
 // ============================================
@@ -1596,91 +1657,46 @@ appointmentForm?.addEventListener(
 // ============================================
 
 window.changeStatus =
-  async function(
+  function(
     id,
     newStatus
   ) {
 
-    if (!currentUser) {
-      return;
-    }
+    appointments =
+      appointments.map(
+        app => {
 
+          if (
+            app.id === id
+          ) {
 
-    try {
+            return {
 
-      const {
-        error
-      } =
-        await supabaseClient
-          .from('appointments')
-          .update({
+              ...app,
 
-            status:
-              newStatus
+              status:
+                newStatus
 
-          })
-          .eq(
-            'id',
-            id
-          )
-          .eq(
-            'user_id',
-            currentUser.id
-          );
+            };
 
-
-      if (error) {
-        throw error;
-      }
-
-
-      appointments =
-        appointments.map(
-          appointment => {
-
-            if (
-              appointment.id ===
-              id
-            ) {
-
-              return {
-
-                ...appointment,
-
-                status:
-                  newStatus
-
-              };
-            }
-
-
-            return appointment;
           }
-        );
 
 
-      renderAppointments();
+          return app;
 
-      updateStats();
-
-
-      showToast(
-        `Estado actualizado a ${newStatus}.`
+        }
       );
 
 
-    } catch (error) {
+    saveData();
 
-      console.error(
-        'Error actualizando estado:',
-        error
-      );
+    renderAppointments();
 
 
-      showToast(
-        'No se pudo actualizar el estado.'
-      );
-    }
+    showToast(
+      `Estado actualizado a ${newStatus}`
+    );
+
   };
 
 
@@ -1689,86 +1705,36 @@ window.changeStatus =
 // ============================================
 
 window.deleteAppointment =
-  async function(id) {
+  function(id) {
 
-    if (!currentUser) {
-      return;
-    }
-
-
-    const confirmed =
-      window.confirm(
-        '¿Seguro que querés eliminar este turno?'
+    appointments =
+      appointments.filter(
+        app =>
+          app.id !== id
       );
 
 
-    if (!confirmed) {
-      return;
-    }
+    saveData();
+
+    renderAppointments();
+
+    updateDemoStatus();
 
 
-    try {
+    showToast(
+      'Turno eliminado'
+    );
 
-      const {
-        error
-      } =
-        await supabaseClient
-          .from('appointments')
-          .delete()
-          .eq(
-            'id',
-            id
-          )
-          .eq(
-            'user_id',
-            currentUser.id
-          );
-
-
-      if (error) {
-        throw error;
-      }
-
-
-      appointments =
-        appointments.filter(
-          appointment =>
-            appointment.id !== id
-        );
-
-
-      renderAppointments();
-
-      updateStats();
-
-      updateDemoStatus();
-
-
-      showToast(
-        '🗑 Turno eliminado correctamente.'
-      );
-
-
-    } catch (error) {
-
-      console.error(
-        'Error eliminando turno:',
-        error
-      );
-
-
-      showToast(
-        'No se pudo eliminar el turno.'
-      );
-    }
   };
 
 
 // ============================================
-// EXPORTAR CSV
+// ESCAPAR VALORES CSV
 // ============================================
 
-function escapeCsvValue(value) {
+function escapeCsvValue(
+  value
+) {
 
   return `"${String(
     value ?? ''
@@ -1776,143 +1742,154 @@ function escapeCsvValue(value) {
     /"/g,
     '""'
   )}"`;
+
 }
 
 
-exportButton?.addEventListener(
-  'click',
-  () => {
+// ============================================
+// EXPORTAR CSV
+// ============================================
 
-    if (
-      appointments.length ===
-      0
-    ) {
+if (btnExport) {
 
-      showToast(
-        'No hay datos para exportar.'
-      );
+  btnExport.addEventListener(
+    'click',
+    () => {
 
-      return;
-    }
+      if (
+        appointments.length ===
+        0
+      ) {
 
+        showToast(
+          'No hay datos para exportar'
+        );
 
-    let csvContent =
-      '\uFEFF' +
-      'ID,Cliente,Telefono,Servicio,Fecha,Hora,Estado\n';
+        return;
 
-
-    appointments.forEach(
-      appointment => {
-
-        csvContent += [
-
-          escapeCsvValue(
-            appointment.id
-          ),
-
-          escapeCsvValue(
-            appointment.name
-          ),
-
-          escapeCsvValue(
-            appointment.phone
-          ),
-
-          escapeCsvValue(
-            appointment.service
-          ),
-
-          escapeCsvValue(
-            appointment.date
-          ),
-
-          escapeCsvValue(
-            appointment.time
-          ),
-
-          escapeCsvValue(
-            appointment.status
-          )
-
-        ].join(',') + '\n';
       }
-    );
 
 
-    const blob =
-      new Blob(
-        [csvContent],
-        {
-          type:
-            'text/csv;charset=utf-8;'
+      let csvContent =
+        'data:text/csv;charset=utf-8,\uFEFF' +
+        'ID,Cliente,Telefono,Servicio,Fecha,Hora,Estado\n';
+
+
+      appointments.forEach(
+        app => {
+
+          csvContent += [
+
+            escapeCsvValue(
+              app.id
+            ),
+
+            escapeCsvValue(
+              app.name
+            ),
+
+            escapeCsvValue(
+              app.phone
+            ),
+
+            escapeCsvValue(
+              app.service
+            ),
+
+            escapeCsvValue(
+              app.date
+            ),
+
+            escapeCsvValue(
+              app.time
+            ),
+
+            escapeCsvValue(
+              app.status
+            )
+
+          ].join(',') +
+          '\n';
+
         }
       );
 
 
-    const url =
-      URL.createObjectURL(
-        blob
+      const encodedUri =
+        encodeURI(
+          csvContent
+        );
+
+
+      const link =
+        document.createElement(
+          'a'
+        );
+
+
+      link.setAttribute(
+        'href',
+        encodedUri
       );
 
 
-    const link =
-      document.createElement(
-        'a'
+      link.setAttribute(
+        'download',
+        `turnos_patric_soft_${new Date()
+          .toISOString()
+          .split('T')[0]}.csv`
       );
 
 
-    link.href =
-      url;
+      document.body.appendChild(
+        link
+      );
 
 
-    link.download =
-      `turnos_patric_soft_${new Date()
-        .toISOString()
-        .split('T')[0]}.csv`;
+      link.click();
 
 
-    document.body.appendChild(
-      link
-    );
+      document.body.removeChild(
+        link
+      );
 
 
-    link.click();
+      showToast(
+        'Reporte exportado correctamente'
+      );
 
-    document.body.removeChild(
-      link
-    );
+    }
+  );
 
-
-    URL.revokeObjectURL(
-      url
-    );
-
-
-    showToast(
-      '📊 Reporte exportado correctamente.'
-    );
-  }
-);
+}
 
 
 // ============================================
 // BÚSQUEDA
 // ============================================
 
-searchInput?.addEventListener(
-  'input',
-  renderAppointments
-);
+if (searchInput) {
+
+  searchInput.addEventListener(
+    'input',
+    renderAppointments
+  );
+
+}
 
 
 // ============================================
 // FILTRO
 // ============================================
 
-filterStatus?.addEventListener(
-  'change',
-  renderAppointments
-);
+if (filterStatus) {
+
+  filterStatus.addEventListener(
+    'change',
+    renderAppointments
+  );
+
+}
 
 
 // ============================================
